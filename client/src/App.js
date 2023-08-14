@@ -1,42 +1,41 @@
-import { useState, useEffect } from 'react'
-import io from 'socket.io-client'
+import React, { useEffect, useState } from 'react'
+import { Route, Routes } from 'react-router-dom'
+import ChatContext from './Context'
 
 import './App.css'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 
-import Home from './pages/home'
-import Chat from './pages/chat'
+import { getAllUser } from './actions/user'
 
-const socket = io.connect('http://localhost:4000/')
+import Sidebar from './components/Sidebar'
+// import Nav from './components/Nav'
+import Homepage from './pages/home'
+import Chatpage from './pages/chat'
 
-function App () {
-  const [username, setUsername] = useState('')
+
+function App() {
+
+useEffect(() => {
+  const user =  getAllUser()
+  console.log("user in appp.js",user);
+ }, [])
+ 
   const [room, setRoom] = useState('')
+  const [username, setUsername] = useState('cat-women')
 
   return (
-    <Router>
-      <div className='App'>
-        <Routes>
-          <Route
-            path='/'
-            element={
-              <Home
-                username={username}
-                setUsername={setUsername}
-                room={room}
-                setRoom={setRoom}
-                socket={socket}
-              />
-            }
-          />
-
-          <Route
-            path='/chat'
-            element={<Chat username={username} room={room} socket={socket} />}
-          />
-        </Routes>
-      </div>
-    </Router>
+    <div className='App'>
+      <ChatContext.Provider value={{ username, setUsername }}>
+        <div style={{ display: 'flex' }}>
+          <Sidebar />
+          <div>
+            <Routes>
+              <Route path='/' element={<Homepage />} exact />
+              <Route path='/chats' element={<Chatpage />} />
+            </Routes>
+          </div>
+        </div>
+      </ChatContext.Provider>
+    </div>
   )
 }
 

@@ -6,12 +6,8 @@ const { ObjectId } = require('mongodb')
 class UserController {
   signup = async (req, res, next) => {
     const { username, email, password } = req.body
-    console.log(req.body)
     try {
-      console.log(typeof User.findOne())
-      const oldUser = await User.findOne({
-        email
-      })
+      const oldUser = await User.findOne({ email })
 
       console.log(oldUser)
       if (oldUser) return res.status(400).json({ msg: 'User already exits' })

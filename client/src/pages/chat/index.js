@@ -1,16 +1,20 @@
+import React, { useContext } from 'react'
 import styles from './styles.module.css'
-import MessagesReceived from './messages'
-import SendMessage from './send-message'
 
-const Chat = ({ username, room, socket }) => {
+import ChatContext from '../../Context'
+import MyChats from '../../components/mychats'
+import ChatBox from '../../components/chatBox'
+
+function ChatPage () {
+  const { username, setUsername } = useContext(ChatContext)
+  console.log(username)
+  const user = 'new user'
   return (
-    <div className={styles.chatContainer}>
-      <div>
-        <MessagesReceived socket={socket} />
-        <SendMessage socket={socket} username={username} room={room} />
-      </div>
+    <div>
+      <h1>Welcome to Chat</h1>
+      {user && <ChatBox />}
     </div>
   )
 }
 
-export default Chat
+export default ChatPage

@@ -4,8 +4,9 @@ const http = require('http')
 const cors = require('cors')
 const { Server } = require('socket.io')
 const bodyParser = require('body-parser')
+const mongoose = require('mongoose')
 
-const ErrorHandler = require('./src/middleware/errorHandler.js')
+const  ErrorHandler  = require('./src/middleware/errorHandler.js')
 const User = require('./src/routes/user.js')
 const Chat = require('./src/routes/chat.js')
 
@@ -68,6 +69,16 @@ app.use('/chat', Chat)
 // error handler
 app.use(ErrorHandler)
 
-server.listen(4000, () => {
-  console.log('Server is running on port 4000')
-})
+// database connection
+
+mongoose
+  .connect(process.env.CONNECTION_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+  })
+  .then(() =>
+    app.listen(process.env.PORT, () =>
+      console.log(`Server running on port ${process.env.PORT}`)
+    )
+  )
+  .catch(err => console.log(err.message))
