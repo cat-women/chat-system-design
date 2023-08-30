@@ -20,18 +20,24 @@ app.use(cors())
 const { createServer } = require("http");
 const { Server } = require("socket.io");
 
-const httpServer = createServer();
+const httpServer = createServer(app);
+
 const io = new Server(httpServer, {
   path: '/server/',
+  connect_timeout: 10000,
   cors: {
     origin: ["http://localhost:3000"]
   }
-
 });
-console.log(io)
+
+
 // make connection with user from server side
 io.on('connection', (socket) => {
   console.log('new client connected', socket);
+
+  socket.on('disconnect', () => {
+    console.log('disconnected from user');
+  });
 
 });
 
