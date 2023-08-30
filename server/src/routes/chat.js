@@ -18,4 +18,5 @@ router.put('/rename', authUser, renameGroup)
 router.put('/removeUser', authUser, removeFromGroup)
 router.put('/addUser', authUser, addToGroup)
 
+
 module.exports = router

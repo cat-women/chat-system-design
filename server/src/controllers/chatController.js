@@ -29,7 +29,7 @@ const accessChat = async (req, res, next) => {
       'users',
       '-password'
     )
-    res.status(200).json({ chat: fullChat })
+    return res.status(200).json({ chat: fullChat })
   } catch (error) {
     console.log(error)
     next()
@@ -46,10 +46,13 @@ const fetchChat = async (req, res, next) => {
       .then(result => {
         res.status(200).json(result)
       })
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ msg: "Something went wrong" })
+  }
 }
 
-const createGroupChat = async (req, res, next) => {
+const createGroupChat = async (req, res) => {
   if (!req.body.users || !req.body.name) {
     return res.status(400).json({ msg: 'Provide all fiedls' })
   }
@@ -72,7 +75,7 @@ const createGroupChat = async (req, res, next) => {
       .populate('users', '-password')
       .populate('groupAdmin', '-password')
 
-    res.status(200).json(fullGroupChat)
+    return res.status(200).json(fullGroupChat)
   } catch (error) {
     console.log(error)
     next()
@@ -91,10 +94,11 @@ const renameGroup = async (req, res, next) => {
       .populate('groupAdmin', '-password')
 
     if (!updatedChat) res.status(404).json({ msg: 'Chat not found' })
-    res.status(200).json(updatedChat)
+    return res.status(200).json(updatedChat)
   } catch (error) {
     console.log(error)
     next()
+
   }
 }
 const addToGroup = async (req, res, next) => {
@@ -109,10 +113,11 @@ const addToGroup = async (req, res, next) => {
       .populate('groupAdmin', '-password')
 
     if (!removed) res.status(404).json({ msg: 'Chat not found' })
-    res.status(200).json(removed)
+    return res.status(200).json(removed)
   } catch (error) {
     console.log(error)
     next()
+
   }
 }
 
@@ -128,10 +133,11 @@ const removeFromGroup = async (req, res, next) => {
       .populate('groupAdmin', '-password')
 
     if (!removed) res.status(404).json({ msg: 'Chat not found' })
-    res.status(200).json(removed)
+    return res.status(200).json(removed)
   } catch (error) {
     console.log(error)
     next()
+
   }
 }
 module.exports = {

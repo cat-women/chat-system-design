@@ -3,9 +3,7 @@ const jwt = require('jsonwebtoken')
 require('dotenv').config()
 
 function generateToken(data) {
-  const access_token = jwt.sign(data, process.env.JWT_ACCESS_TOKEN_KEY, {
-    expiresIn: process.env.ACCESS_TOKEN_LIFE
-  })
+  const access_token = jwt.sign(data, process.env.JWT_ACCESS_TOKEN_KEY)
 
   const refresh_token = jwt.sign(data, process.env.JWT_REFRESH_TOKEN_KEY, {
     expiresIn: process.env.REFRESH_TOKEN_LIFE
@@ -19,8 +17,8 @@ function verifyAccessToken(access_token) {
 
   try {
     decoded = jwt.verify(access_token, process.env.JWT_ACCESS_TOKEN_KEY)
-  } catch (error) {
-    error = error
+  } catch (err) {
+    error = err
   }
   return { decoded, error }
 }

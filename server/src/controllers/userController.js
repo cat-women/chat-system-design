@@ -1,7 +1,7 @@
 const User = require('../models/user')
 const bcrypt = require('bcryptjs')
 const { generateToken } = require('../services/token')
-const { ObjectId } = require('mongodb')
+
 
 class UserController {
   signup = async (req, res, next) => {
@@ -57,6 +57,7 @@ class UserController {
     } catch (error) {
       console.log(error)
       next()
+
     }
   }
 
@@ -64,21 +65,22 @@ class UserController {
     try {
       const keywords = req.query.search
         ? {
-            $or: [
-              { name: { $regex: req.query.search, $options: 'i' } },
-              { email: { $regex: req.query.search, $options: 'i' } }
-            ]
-          }
+          $or: [
+            { username: { $regex: req.query.search, $options: 'i' } },
+            { email: { $regex: req.query.search, $options: 'i' } }
+          ]
+        }
         : {}
 
-      const users = await User.find(keywords).find({
+      const users = await User.find(keywords, ['_id', 'username']).find({
         _id: { $ne: req.user.id }
       })
 
-      res.status(200).json(users)
+      return res.status(200).json(users)
     } catch (error) {
       console.log(error)
       next()
+
     }
   }
 }
