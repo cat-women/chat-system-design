@@ -14,32 +14,36 @@ import Homepage from './pages/home'
 import Chatpage from './pages/chat'
 import Auth from './pages/auth'
 
+function App() {
+
 // connect to client
 
 const socket = io("http://localhost:8000", {
-  path: "/server/"
+  path: "/server/",
+  timeout: 50000
 });
 
+
+
+socket.on("connect", () => {
+  console.log("connected to socket", socket.id);
+});
+
+socket.on("disconnect", () => {
+  console.log("socket disconnected", socket.id);
+});
 
 
 // connection with server
 console.log("socket type", socket);
 
-socket.on('connection', function () {
-  console.log('Connected to Server')
-
-});
 
 
-function App() {
+
   const getData = async () => {
     const res = await getChats()
     if (res) setChats(res.data)
   }
-
-  socket.on('connection', () => {
-    console.log("connected to server");
-  })
 
   const [room, setRoom] = useState('')
   const [chats, setChats] = useState([])

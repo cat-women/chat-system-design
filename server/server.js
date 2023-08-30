@@ -39,6 +39,11 @@ io.on('connection', (socket) => {
     console.log('disconnected from user');
   });
 
+  // either by directly modifying the `auth` attribute
+  socket.on("connect_error", () => {
+    // socket.auth.token = "abcd";
+    socket.connect();
+  });
 });
 
 

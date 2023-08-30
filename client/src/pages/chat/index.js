@@ -7,7 +7,6 @@ import ChatBox from '../../components/chatBox'
 
 function ChatPage () {
   const { username, setUsername } = useContext(ChatContext)
-  console.log(username)
   const user = 'new user'
   return (
     <div>
